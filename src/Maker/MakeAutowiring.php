@@ -33,8 +33,6 @@ final class MakeAutowiring extends AbstractMaker
 
     /**
      * Return the command name for your maker (e.g. make:report).
-     *
-     * @return string
      */
     public static function getCommandName(): string
     {
@@ -137,8 +135,35 @@ final class MakeAutowiring extends AbstractMaker
 
         // create or manipulate composer.json
         $composer = json_decode($this->fileManager->getFileContents('composer.json'));
+        if (!isset($composer->autoload)) {
+            $composer->autoload = new \stdclass();
+        }
+        if (!isset($composer->autoload->{'psr-4'})) {
+            $composer->autoload->{'psr-4'} = new \stdclass();
+        }
+        if (!isset($composer->autoload->{'psr-4'}->{$generator->getRootNamespace().'\\'})) {
+            $composer->autoload->{'psr-4'}->{$generator->getRootNamespace().'\\'} = new \stdclass();
+        }
         $composer->autoload->{'psr-4'}->{$generator->getRootNamespace().'\\'} = 'src/';
         $generator->dumpFile('composer.json', json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        // create or manipulate routing.yml
+        $routingPath = 'app/config/routing.yml';
+
+        $routing = Yaml::parse($this->fileManager->fileExists($routingPath) ? $this->fileManager->getFileContents($routingPath) : '');
+
+        if (!\is_array($routing)) {
+            $routing = [];
+        }
+
+        if (!isset($routing['controllers'])) {
+            $routing['controllers'] = [];
+        }
+
+        $routing['controllers']['resource'] = '../../src/Controller/';
+        $routing['controllers']['type'] = 'annotation';
+
+        $generator->dumpFile($routingPath, Yaml::dump($routing, 4));
 
         // write changes
         $generator->writeChanges();

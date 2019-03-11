@@ -9,7 +9,7 @@ This file is part of the ContaoMakerBundle.
 EOF;
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('Resources/contao/templates')
+    ->exclude('Resources')
     ->exclude('Fixtures')
     ->in([
         __DIR__.'/src',

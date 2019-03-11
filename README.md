@@ -31,11 +31,4 @@ _Note:_ since the Contao Managed Edition still uses the old Symfony structure, t
 
 ### `make:contao-manager-plugin`
 
-This generates an `App\ContaoManager\Plugin` class. The actual namespace depends on your [configured app namespace](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html#configuration). It also adds a `getBundles` method where a bundle depending on your configured app namespace will be loaded. Example: if your maker config looks like this:
-
-```yml
-maker:
-    root_namespace: 'Acme'
-```
-
-the command will load a `AcmeBundle::class` after the `ContaoCoreBundle::class`.
+This generates an `App\ContaoManager\Plugin` class. The actual namespace depends on your [configured app namespace](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html#configuration). It also asks you whether you want load a bundle or load routes (the latter is necessary for Contao 4.4).

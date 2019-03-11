@@ -14,18 +14,20 @@ namespace InspiredMinds\ContaoMakerBundle\Maker;
 
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
+use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 final class MakeContaoManagerPlugin extends AbstractMaker
 {
     /**
      * Return the command name for your maker (e.g. make:report).
-     *
-     * @return string
      */
     public static function getCommandName(): string
     {
@@ -54,18 +56,43 @@ final class MakeContaoManagerPlugin extends AbstractMaker
     }
 
     /**
+     * If necessary, you can use this method to interactively ask the user for input.
+     */
+    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+        if ($io->askQuestion(new ConfirmationQuestion('Do you want to load a bundle?', true))) {
+            $command->addArgument('load-bundle', InputArgument::REQUIRED);
+            $input->setArgument(
+                'load-bundle',
+                $io->ask(
+                    'Choose a bundle class to be loaded in the plugin (e.g. <fg=yellow>App\\AppBundle</>)',
+                    'App\\AppBundle',
+                    [Validator::class, 'validateClassName']
+                )
+            );
+        }
+
+        $command->addArgument('load-routes', InputArgument::REQUIRED);
+        $input->setArgument('load-routes', $io->askQuestion(new ConfirmationQuestion('Do you want to load routes?', true)));
+    }
+
+    /**
      * Called after normal code generation: allows you to do anything.
      */
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
+        if ('App' !== $generator->getRootNamespace()) {
+            throw new RuntimeCommandException('The contao/manager-plugin only supports an App\\ContaoManager\\Plugin class.');
+        }
+
         $bundleName = preg_replace('/Bundle$/', '', $generator->getRootNamespace()).'Bundle';
 
         $targetPath = $generator->generateClass(
             $generator->getRootNamespace().'\ContaoManager\Plugin',
             __DIR__.'/../Resources/skeleton/contao-manager-plugin/ContaoManagerPlugin.tpl.php',
             [
-                'full_bundle_name' => $generator->getRootNamespace().'\\'.$bundleName,
-                'bundle_name' => $bundleName,
+                'load_bundle' => $input->hasArgument('load-bundle') ? $input->getArgument('load-bundle') : false,
+                'load_routes' => $input->hasArgument('load-routes') ? $input->getArgument('load-routes') : false,
             ]
         );
 
