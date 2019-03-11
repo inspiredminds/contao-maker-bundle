@@ -1,8 +1,8 @@
 <?= "<?php\n"; ?>
 
-namespace <?= $namespace ?>;
+namespace <?= $namespace; ?>;
 
-use <?= $full_bundle_name ?>;
+use <?= $full_bundle_name; ?>;
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
@@ -19,7 +19,7 @@ class Plugin implements BundlePluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(<?= $bundle_name ?>::class)->setLoadAfter([ContaoCoreBundle::class]),
+            BundleConfig::create(<?= $bundle_name; ?>::class)->setLoadAfter([ContaoCoreBundle::class]),
         ];
     }
 }

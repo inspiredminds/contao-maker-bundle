@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the ContaoExtendedFormFields bundle.
+ * This file is part of the ContaoMakerBundle.
  *
  * (c) inspiredminds
  *
@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace InspiredMinds\ContaoMakerBundle;
 
-use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
@@ -29,7 +28,7 @@ class ContaoManagerPlugin implements BundlePluginInterface
     public function getBundles(ParserInterface $parser)
     {
         return [
-        	BundleConfig::create(MakerBundle::class),
+            BundleConfig::create(MakerBundle::class),
             BundleConfig::create(ContaoMakerBundle::class)->setLoadAfter([MakerBundle::class]),
         ];
     }

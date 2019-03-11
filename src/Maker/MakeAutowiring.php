@@ -1,16 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the ContaoMakerBundle.
+ *
+ * (c) inspiredminds
+ *
+ * @license LGPL-3.0-or-later
+ */
+
 namespace InspiredMinds\ContaoMakerBundle\Maker;
 
-use Composer\Json\JsonManipulator;
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Generator;
-use Symfony\Bundle\MakerBundle\InputAwareMakerInterface;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
-use Symfony\Bundle\MakerBundle\Util\YamlSourceManipulator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -24,51 +31,42 @@ final class MakeAutowiring extends AbstractMaker
         $this->fileManager = $fileManager;
     }
 
-	/**
+    /**
      * Return the command name for your maker (e.g. make:report).
      *
      * @return string
      */
-	public static function getCommandName(): string
-	{
-		return 'make:autowiring';
-	}
+    public static function getCommandName(): string
+    {
+        return 'make:autowiring';
+    }
 
-	/**
+    /**
      * Configure the command: set description, input arguments, options, etc.
      *
      * By default, all arguments will be asked interactively. If you want
      * to avoid that, use the $inputConfig->setArgumentAsNonInteractive() method.
-     *
-     * @param Command            $command
-     * @param InputConfiguration $inputConfig
      */
-	public function configureCommand(Command $command, InputConfiguration $inputConfig)
-	{
-		$command
+    public function configureCommand(Command $command, InputConfiguration $inputConfig): void
+    {
+        $command
             ->setDescription('Create default autowiring for root namespace')
             ->setHelp(file_get_contents(__DIR__.'/../Resources/help/MakeAutowiring.txt'))
         ;
-	}
+    }
 
-	/**
+    /**
      * Configure any library dependencies that your maker requires.
-     *
-     * @param DependencyBuilder $dependencies
      */
-	public function configureDependencies(DependencyBuilder $dependencies)
-	{
-	}
+    public function configureDependencies(DependencyBuilder $dependencies): void
+    {
+    }
 
-	/**
+    /**
      * Called after normal code generation: allows you to do anything.
-     *
-     * @param InputInterface $input
-     * @param ConsoleStyle   $io
-     * @param Generator      $generator
      */
-	public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator)
-	{
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
+    {
         // create or manipulate services.yml
         $servicesPath = 'app/config/services.yml';
 
@@ -77,11 +75,10 @@ final class MakeAutowiring extends AbstractMaker
                 'app/config/services.yml',
                 __DIR__.'/../Resources/skeleton/autowiring/services.tpl.yml',
                 [
-                    'root_namespace' => $generator->getRootNamespace()
+                    'root_namespace' => $generator->getRootNamespace(),
                 ]
             );
-        }
-        else {
+        } else {
             $services = Yaml::parse($this->fileManager->getFileContents($servicesPath));
 
             if (!isset($services['services'])) {
@@ -98,14 +95,14 @@ final class MakeAutowiring extends AbstractMaker
                 'public' => false,
             ], $services['services']['_defaults']);
 
-            if (!isset($services['services'][$generator->getRootNamespace() . '\\'])) {
-                $services['services'][$generator->getRootNamespace() . '\\'] = [];
+            if (!isset($services['services'][$generator->getRootNamespace().'\\'])) {
+                $services['services'][$generator->getRootNamespace().'\\'] = [];
             }
 
-            $services['services'][$generator->getRootNamespace() . '\\'] = array_merge([
+            $services['services'][$generator->getRootNamespace().'\\'] = array_merge([
                 'resource' => '../../src/*',
                 'exclude' => '../../src/{Entity,Tests,Kernel.php}',
-            ], $services['services'][$generator->getRootNamespace() . '\\']);
+            ], $services['services'][$generator->getRootNamespace().'\\']);
 
             $generator->dumpFile($servicesPath, Yaml::dump($services, 4));
         }
@@ -115,7 +112,7 @@ final class MakeAutowiring extends AbstractMaker
 
         $config = Yaml::parse($this->fileManager->fileExists($configPath) ? $this->fileManager->getFileContents($configPath) : '');
 
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             $config = [];
         }
 
@@ -140,7 +137,7 @@ final class MakeAutowiring extends AbstractMaker
 
         // create or manipulate composer.json
         $composer = json_decode($this->fileManager->getFileContents('composer.json'));
-        $composer->autoload->{'psr-4'}->{$generator->getRootNamespace() . '\\'} = 'src/';
+        $composer->autoload->{'psr-4'}->{$generator->getRootNamespace().'\\'} = 'src/';
         $generator->dumpFile('composer.json', json_encode($composer, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
         // write changes
@@ -151,5 +148,5 @@ final class MakeAutowiring extends AbstractMaker
         $io->text([
             'Next: run <fg=green>composer install</> to finalize the setup!',
         ]);
-	}
+    }
 }
