@@ -23,8 +23,7 @@
         "php": ">=7.1",
         "contao/core-bundle": "^4.4",
         "symfony/maker-bundle": "^1.0",
-        "symfony/yaml": "^3.3 || ^4.1",
-        "composer/composer": "^1.0"
+        "symfony/yaml": "^3.3 || ^4.1"
     },
     "autoload": {
         "psr-4": {
