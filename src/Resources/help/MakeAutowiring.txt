@@ -1,0 +1,7 @@
+The <info>%command.name%</info> command generates or updates your config.yml,
+services.yml and composer.json to use autowiring for the app namespace.
+
+<fg=yellow>Note:</> you can ignore the <fg=yellow>It looks like your app may be using a namespace 
+other than 'App'</> notice. This notice will occur when you have not yet added
+an autoload directive to your composer.json for your app namespace (which
+the command will do for you).

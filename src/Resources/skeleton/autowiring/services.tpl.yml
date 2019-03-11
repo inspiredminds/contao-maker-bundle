@@ -1,0 +1,9 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    <?= $root_namespace ?>\:
+        resource: '../../src/*'
+        exclude: '../../src/{Entity,Tests,Kernel.php}'

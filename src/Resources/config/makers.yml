@@ -1,0 +1,9 @@
+services:
+  InspiredMinds\ContaoMakerBundle\Maker\MakeAutowiring:
+    arguments: 
+      - '@maker.file_manager'
+    tags:
+      - { name: maker.command }
+  InspiredMinds\ContaoMakerBundle\Maker\MakeContaoManagerPlugin:
+    tags:
+      - { name: maker.command }
