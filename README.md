@@ -5,7 +5,7 @@
 Contao Maker Bundle
 =====================
 
-This is an extension of the [Symfony Maker Bundle](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html), providing autoloading in the Contao Managed Edition as well as additional commands specific to a Contao installation.
+This is an extension of the [Symfony Maker Bundle](https://github.com/symfony/maker-bundle), providing autoloading in the Contao Managed Edition as well as additional commands specific to a Contao installation.
 
 ## Installation
 
@@ -31,7 +31,7 @@ _Note:_ since the Contao Managed Edition still uses the old Symfony structure, t
 
 ### `make:contao-manager-plugin`
 
-This generates a `App\ContaoManager\Plugin` class. The actual namespace depends on your configured app namespace. It also adds a `getBundles` method where a bundle depending on your configured app namespace will be loaded. Example: if your maker config looks like this:
+This generates an `App\ContaoManager\Plugin` class. The actual namespace depends on your [configured app namespace](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html#configuration). It also adds a `getBundles` method where a bundle depending on your configured app namespace will be loaded. Example: if your maker config looks like this:
 
 ```yml
 maker:
