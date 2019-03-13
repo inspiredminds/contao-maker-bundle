@@ -1,7 +1,8 @@
 services:
-  InspiredMinds\ContaoMakerBundle\Maker\MakeAutowiring:
+  InspiredMinds\ContaoMakerBundle\Maker\MakeContaoKickstart:
     arguments: 
       - '@maker.file_manager'
+      - '@maker.autoloader_util'
     tags:
       - { name: maker.command }
   InspiredMinds\ContaoMakerBundle\Maker\MakeContaoManagerPlugin:
