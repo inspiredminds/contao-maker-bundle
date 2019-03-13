@@ -60,13 +60,13 @@ final class MakeContaoManagerPlugin extends AbstractMaker
      */
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
-        if ($io->askQuestion(new ConfirmationQuestion('Do you want to load a bundle?', true))) {
+        if ($io->askQuestion(new ConfirmationQuestion('Do you want to load a bundle?', no))) {
             $command->addArgument('load-bundle', InputArgument::REQUIRED);
             $input->setArgument(
                 'load-bundle',
                 $io->ask(
                     'Choose a bundle class to be loaded in the plugin (e.g. <fg=yellow>App\\AppBundle</>)',
-                    'App\\AppBundle',
+                    '',
                     [Validator::class, 'validateClassName']
                 )
             );
