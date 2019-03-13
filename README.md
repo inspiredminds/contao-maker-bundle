@@ -32,4 +32,4 @@ _Note:_ since the Contao Managed Edition still uses the old Symfony structure, t
 
 ### `make:contao-manager-plugin`
 
-This generates an `App\ContaoManager\Plugin` class. The actual namespace depends on your [configured app namespace](https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html#configuration). It also asks you whether you want load a bundle or load routes (the latter is necessary for Contao 4.4).
+This generates an `App\ContaoManager\Plugin` class. It will ask you whether you want load a bundle or load routes (the latter is necessary for Contao 4.4).
