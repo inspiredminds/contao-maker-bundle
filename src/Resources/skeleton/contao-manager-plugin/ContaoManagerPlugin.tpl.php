@@ -28,7 +28,7 @@ class Plugin<?php if ($load_bundle || $load_routes): ?> implements<?php endif; ?
     public function getBundles(ParserInterface $parser)
     {
         return [
-            BundleConfig::create(\<?= $load_bundle; ?>::class)->setLoadAfter([ContaoCoreBundle::class]),
+            BundleConfig::create(\<?= $load_bundle; ?>::class),
         ];
     }
 <?php endif; ?><?php if ($load_routes): ?>

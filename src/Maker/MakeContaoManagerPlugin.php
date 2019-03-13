@@ -60,7 +60,7 @@ final class MakeContaoManagerPlugin extends AbstractMaker
      */
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
-        if ($io->askQuestion(new ConfirmationQuestion('Do you want to load a bundle?', no))) {
+        if ($io->askQuestion(new ConfirmationQuestion('Do you want to load a bundle?', false))) {
             $command->addArgument('load-bundle', InputArgument::REQUIRED);
             $input->setArgument(
                 'load-bundle',
