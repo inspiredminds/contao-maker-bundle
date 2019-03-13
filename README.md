@@ -19,13 +19,14 @@ See the [Symfony Maker Bundle documentation](https://symfony.com/doc/current/bun
 
 The following is a list of Contao Managed Edition specific commands, that are introduced in this bundle.
 
-### `make:autowiring`
+### `make:contao-kickstart`
 
 In order to be able to use commands, services, event listeners etc. in your app under the `src/` folder, you need load these services in your app config. This command generates or updates the the following files in order to use autowiring for your app:
 
+* `composer.json`
 * `app/config/services.yml`
 * `app/config/config.yml`
-* `composer.json`
+* `app/config/routing.yml` (optional)
 
 _Note:_ since the Contao Managed Edition still uses the old Symfony structure, the command still generates the config files under `app/config/` rather than just `config/`.
 
